@@ -6,7 +6,7 @@
 *.sln.docstates
 *.VC.db
 *.VC.opendb
-*.vcxproj.user
+*.vcxproj
 *.vcxproj.*
 
 # Build izlazi
