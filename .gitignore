@@ -1,0 +1,48 @@
+﻿# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.opendb
+*.vcxproj.user
+
+# Build izlazi
+[Bb]in/
+[Oo]bj/
+[Dd]ebug*/
+[Rr]elease*/
+[xX]64/
+[xX]86/
+ipch/
+*.obj
+*.pch
+*.pdb
+*.idb
+*.ilk
+*.res
+*.exp
+*.lib
+*.iobj
+*.ipdb
+*.log
+*.tlog
+*.lastbuildstate
+*.cache
+*.rsp
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+Makefile
+*.cmake
+
+# NuGet
+packages/
+*.nupkg
+
+# OS smeće
+Thumbs.db
+.DS_Store
