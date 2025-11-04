@@ -8,6 +8,7 @@
 #include "Texture.h"
 
 #include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -22,44 +23,24 @@ int main()
 
     Renderer render;
 
-    // --- Inicijalne vrijednosti za zadatke ---
-    // 1) Pomak (horizontalni, vertikalni, z)
-    float offsetX = 0.2f;   // pomak u x smjeru (lijevo/desno)
-    float offsetY = -0.1f;  // pomak u y smjeru (gore/dolje)
-    float offsetZ = 0.0f;   // po potrebi
+    float offsetX = 0.3f;
+    float offsetY = 0.2f;
+    glm::vec3 color(0.8f, 0.1f, 0.8f);
 
-    // 2) Boja (RGB)
-    float colorR = 1.0f; // npr. crvena
-    float colorG = 1.0f; // zelena
-    float colorB = 1.0f; // plava
-
-    // 3) Koristiti teksturu ili ne (1 = yes, 0 = no)
-    float useTexture = 1.0f;
-
-    // obavezno bind shader i postavi statične/uniform vrijednosti koje se ne mijenjaju svaki frame
-    shader.Bind();
-
-    // poveži sampler uniform s texture unit 0
-    shader.SetUniformInt("tex", 0);
-
-    // petlja
     while (!window.isClosed())
     {
         window.ProcessInput();
         render.Clear();
 
-        // update uniformi prije crtanja
         shader.Bind();
-        // offset kao vec3 (koristimo postojeću funkciju SetUniformVec3 iz Shader klase)
-        shader.SetUniformVec3("offset", glm::vec3(offsetX, offsetY, offsetZ));
 
-        // boja
-        shader.SetUniformVec3("uColor", glm::vec3(colorR, colorG, colorB));
+        int programID;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &programID);
 
-        // use texture (float uniform)
-        shader.SetUniformFloat("useTexture", useTexture);
-
-        // modeli crtaju (Model::Draw interna bind/texture poziva)
+        int offsetLoc = glGetUniformLocation(programID, "offset");
+        int colorLoc = glGetUniformLocation(programID, "color");
+        glUniform2f(offsetLoc, offsetX, offsetY);
+        glUniform3f(colorLoc, color.x, color.y, color.z);
         model.Draw(shader, tex);
 
         window.SwapAndPoll();
