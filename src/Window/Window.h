@@ -20,6 +20,9 @@ public:
 
 	inline int isClosed() const { return glfwWindowShouldClose(m_Window); }
 
+	//nadodao IB
+	//GLFWwindow* getWindow() const { return m_Window; }
+
 private:
 	GLFWwindow* m_Window;
 };
