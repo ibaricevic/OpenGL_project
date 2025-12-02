@@ -65,6 +65,14 @@ int main()
             //float angle = 20.0f * i;
             float angle = glfwGetTime() * (i+5);
             mat_model = glm::rotate(mat_model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+            const float radius = 10.0f;
+            float camX = sin(glfwGetTime()) * radius;
+            float camZ = cos(glfwGetTime()) * radius;
+            glm::mat4 view;
+            view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+
             shader.SetUniform4x4("model", mat_model);
             shader.SetUniform4x4("view", view);
             shader.SetUniform4x4("projection", projection);
