@@ -43,6 +43,8 @@ int main()
 
     glm::vec3 color(1.0f, 1.0f, 1.0f);
 
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     while (!window.isClosed())
     {
         window.ProcessInput();
