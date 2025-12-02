@@ -1,6 +1,6 @@
 #version 330 core
 
-in vec3 normals;
+in vec3 normal;
 in vec2 TexCord;
 
 out vec4 fColor;

@@ -7,24 +7,27 @@
 #include "Shader.h"
 #include "Texture.h"
 
-#include "../src/vendor/glm/glm.hpp"
-#include "../src/vendor/glm/gtc/type_ptr.hpp"
-#include "../src/vendor/glm/gtc/matrix_transform.hpp"
+#include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-// 3D transformations
+
 glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
 
-// glm::mat4 projection = glm::ortho(-5.0f, 5.0f, -7.0f, 7.0f, 0.1f, 100.0f);
-// glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+ /*glm::mat4 projection = glm::ortho(-3.0f, 3.0f, -4.0f, 4.0f, 0.1f, 100.0f);
+ glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));*/
 
 std::vector<glm::vec3> positions = {
-       {-1.5f, 0.8f, 0.3f},
        { 0.0f, 0.0f, 0.0f},
-       { 1.0f, -1.2f, -1.3f}
+       {-1.5f, 0.8f, 0.3f},
+       { 1.0f, -1.2f, -1.3f},
+       { 1.0f, 1.2f, 1.3f},
+       { 0.0f, 0.0f, -10.0f},
+       { -1.3f,  1.0f, -1.5f}
 };
 
 
@@ -55,7 +58,7 @@ int main()
         shader.SetUniformVec3("color", color);
 
 
-        for (unsigned int i = 0; i < 3; i++)
+        for (unsigned int i = 0; i < positions.size(); i++)
         {
             glm::mat4 mat_model = glm::mat4(1.0f);
             mat_model = glm::translate(mat_model, positions[i]);
@@ -66,8 +69,6 @@ int main()
             shader.SetUniform4x4("view", view);
             shader.SetUniform4x4("projection", projection);
 
-
-            // glDrawArrays(GL_TRIANGLES, 0, 36);
             model.Draw(shader, tex);
         }
 
