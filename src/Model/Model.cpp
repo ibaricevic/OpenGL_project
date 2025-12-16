@@ -127,7 +127,7 @@ void Mesh::LoadMesh(const std::string& meshPath)
     }
     objFile.close();
 
-    for (int f = 0; f < temp_indices.size(); f+=3) {
+    for (unsigned int f = 0; f < temp_indices.size(); f+=3) {
         x = temp_indices[f];
         y = temp_indices[f + 1];
         z = temp_indices[f + 2];
