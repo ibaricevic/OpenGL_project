@@ -37,7 +37,7 @@ glm::vec3 cameraPosition(0.0f, 2.0f, 5.0f);
 glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, glm::vec3(0.0, 1.0, 0.0));
 
 //boja svjetla
-glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+//glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 
 //boje objekata
 glm::vec3 objectColor[] = {
@@ -93,6 +93,15 @@ int main()
         mat_lightModel = glm::translate(mat_lightModel, lightPos);
         mat_lightModel = glm::scale(mat_lightModel, glm::vec3(0.2f));
 
+		float t = glfwGetTime();
+        float mixValue = (sin(t) + 1.0f) / 2.0f; // varies between 0.0 and 1.0 over time
+        glm::vec3 lightColor = glm::mix(
+            glm::vec3(0.9f, 0.3f, 0.3f),
+            glm::vec3(0.3f, 0.9f, 0.3f),
+			mixValue
+        );
+
+
         shader.SetUniform4x4("model", mat_lightModel);
         shader.SetUniformVec3("lightColor", lightColor);
         shader.SetUniformVec3("lightPos", lightPos);
@@ -100,7 +109,7 @@ int main()
 
         lightModel.Draw(shader, tex);
 
-        for (unsigned int i = 0; i < 4; i++)
+        for (unsigned int i = 0; i < 5; i++)
         {
             glm::mat4 mat_model = glm::mat4(1.0f);
             mat_model = glm::translate(mat_model, cubePositions[i]);
