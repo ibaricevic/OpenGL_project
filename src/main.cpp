@@ -15,36 +15,35 @@
 const unsigned int SCR_WIDTH = 1200;
 const unsigned int SCR_HEIGHT = 1000;
 
-// 3D transformations
-// glm::mat4 projection = glm::ortho(-5.0f, 5.0f, -7.0f, 7.0f, 0.1f, 100.0f);
-// glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-
 glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 glm::vec3 cubePositions[] = {
     glm::vec3(-2.0f, 0.0f, 0.0f),
     glm::vec3(-1.0f, 0.0f, 0.0f),
-    glm::vec3(0.0f, 0.0f, 0.0f),
+    glm::vec3(0.0f, 1.6f, 0.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f),
+    glm::vec3(0.0f, -1.0f, 0.0f),
+    glm::vec3(0.0f, -1.6f, 0.0f),
     glm::vec3(1.0f, 0.0f, 0.0f),
     glm::vec3(2.0f, 0.0f, 0.0f)
 };
 
 //polozaj kamere
 const float radius = 6.0f;
-glm::vec3 cameraTarget(cubePositions[2]);
-//tangens 45 je 1 kada je y = z (skica)
-glm::vec3 cameraPosition(0.0f, 2.0f, 5.0f);
+glm::vec3 cameraTarget(cubePositions[3]);
+glm::vec3 cameraPosition(0.0f, 2.0f, 8.0f);
 glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, glm::vec3(0.0, 1.0, 0.0));
 
-//boja svjetla
-//glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 
 //boje objekata
 glm::vec3 objectColor[] = {
     glm::vec3(0.5f, 0.5f, 0.5f),
     glm::vec3(1.0f, 0.5f, 0.31f),
+    glm::vec3(0.5f, 0.5f, 0.5f),
     glm::vec3(0.0f, 1.0f, 0.0f),
-    glm::vec3(0.0f, 0.0f, 1.0f),
+    glm::vec3(0.5f, 0.5f, 0.5f),
+    glm::vec3(0.5f, 0.5f, 0.1f),
+    glm::vec3(0.5f, 0.5f, 0.5f),
     glm::vec3(1.0f, 0.0f, 0.0f)
 };
 
@@ -54,6 +53,9 @@ float specularStrength[] = {
     1.0f,
     0.3f,
     0.9f,
+    0.3f,
+    0.3f,
+    0.3f,
     0.3f
 };
 
@@ -71,7 +73,6 @@ int main()
 
     Renderer render;
 
-
     while (!window.isClosed())
     {
         window.ProcessInput();
@@ -79,8 +80,6 @@ int main()
 
         float camX = sin(glfwGetTime()) * radius;
         float camZ = cos(glfwGetTime()) * radius;
-        // glm::vec3 cameraPosition(camX, cameraRoll, camZ);
-        // glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, glm::vec3(0.0, 1.0, 0.0));
 
         glm::vec3 lightPos(camX, 5.0f, camZ);
 
@@ -88,33 +87,28 @@ int main()
         shader.SetUniform4x4("projection", projection);
         shader.SetUniform4x4("view", view);
 
-
-        glm::mat4 mat_lightModel = glm::mat4(1.0f);
-        mat_lightModel = glm::translate(mat_lightModel, lightPos);
-        mat_lightModel = glm::scale(mat_lightModel, glm::vec3(0.2f));
-
 		float t = glfwGetTime();
         float mixValue = (sin(t) + 1.0f) / 2.0f; // varies between 0.0 and 1.0 over time
         glm::vec3 lightColor = glm::mix(
-            glm::vec3(0.9f, 0.3f, 0.3f),
-            glm::vec3(0.3f, 0.9f, 0.3f),
+            glm::vec3(0.9f, 0.1f, 0.1f),
+            glm::vec3(0.1f, 0.9f, 0.1f),
 			mixValue
         );
 
-
-        shader.SetUniform4x4("model", mat_lightModel);
         shader.SetUniformVec3("lightColor", lightColor);
         shader.SetUniformVec3("lightPos", lightPos);
         shader.SetUniformVec3("viewPos", cameraPosition);
 
         lightModel.Draw(shader, tex);
 
-        for (unsigned int i = 0; i < 5; i++)
+        unsigned int cubeCount = sizeof(cubePositions) / sizeof(cubePositions[0]);
+
+        for (unsigned int i = 0; i < cubeCount; i++)
         {
             glm::mat4 mat_model = glm::mat4(1.0f);
             mat_model = glm::translate(mat_model, cubePositions[i]);
             mat_model = glm::scale(mat_model, glm::vec3(0.5f));
-            // float angle = 90.0f * i;
+            
             shader.SetUniform4x4("model", mat_model);
             shader.SetUniformVec3("objectColor", objectColor[i]);
             shader.SetUniformFloat("specularStrength", specularStrength[i]);
